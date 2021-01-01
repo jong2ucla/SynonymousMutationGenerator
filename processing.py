@@ -12,16 +12,14 @@ def AATranslate(NucleotideSequence):
     'TAC':'Y',  'TGG':'W',  'CAA':'Q',  'CAG':'Q',  'AAT':'N',  'AAC':'N',
     'CAT':'H',  'CAC':'H',  'GAA':'E',  'GAG':'E',  'GAT':'D',  'GAC':'D',
     'AAA':'K',  'AAG':'K',  'CGT':'R',  'CGC':'R',  'CGA':'R',  'CGG':'R',
-    'AGA':'R',  'AGG':'R',  'TAA':'***',  'TAG':'***',  'TGA':'***'}
+    'AGA':'R',  'AGG':'R',  'TAA':'*',  'TAG':'*',  'TGA':'*'}
 
-#Now, I'll tackle the input sequence in chunks of three and substitute each codon for its amino acid.
     Protein =""
     for i in range (0,len(NucleotideSequence),3):
         codon = NucleotideSequence[i:i + 3]
         Protein += NucCodonDict[codon]
     return Protein
 
-#Next, I'll use a similar method to substitute each codon for its synonymous codon.
 def AltCodon(UserSeq):
 
     ##This is my dictionary for the best alternative codon (using human codon frequency).
@@ -31,19 +29,8 @@ def AltCodon(UserSeq):
     ##(3) The alternative codon was chosen to have the highest frequency of the remaining codons
     ##(4) Wobble base pairing was avoided. In particular, in the third position of the codon, A to G mutations and C to T mutations were avoided. A codon of lesser frequency was chosen in this case.
 
-    HumanAltCodonDict={'ATT':'ATC',   'ATC':'ATA',  'ATA':'ATC',  'CTT':'TTG',  'CTC':'CTG',
-    'CTA':'TTA',  'CTG':'CTC',  'TTA':'CTA',  'TTG':'CTT',  'GTT':'GTA',  'GTC':'GTG',
-    'GTA':'GTT',  'GTG':'GTC',  'TTT':'TTC',  'TTC':'TTT',  'ATG':'ATG',  'TGT':'TGC',
-    'TGC':'TGT',  'GCT':'GCA',  'GCC':'GCA',  'GCA':'GCC',  'GCG':'GCC',  'GGT':'GGA',
-    'GGC':'GGA',  'GGA':'GGC',  'GGG':'GGC',  'CCT':'CCA',  'CCC':'CCA',  'CCA':'CCC',
-    'CCG':'CCC',  'ACT':'ACA',  'ACC':'ACA',  'ACA':'ACC',  'ACG':'ACC',  'TCT':'AGC',
-    'TCC':'AGC',  'TCA':'AGC',  'TCG':'AGC',  'AGT':'TCC',  'AGC':'TCC',  'TAT':'TAC',
-    'TAC':'TAT',  'TGG':'TGG',  'CAA':'CAG',  'CAG':'CAA',  'AAT':'AAC',  'AAC':'AAT',
-    'CAT':'CAC',  'CAC':'CAT',  'GAA':'GAG',  'GAG':'GAA',  'GAT':'GAC',  'GAC':'GAT',
-    'AAA':'AAG',  'AAG':'AAA',  'CGT':'CGG',  'CGC':'AGA',  'CGA':'AGA',  'CGG':'AGA',
-    'AGA':'CGC',  'AGG':'CGG',  'TAA':'***',  'TAG':'***',  'TGA':'***'}
+    HumanAltCodonDict={'AAA':'AAG','AAC':'AAT','AAG':'AAA','AAT':'AAC','ACA':'ACC','ACC':'ACA','ACG':'ACC','ACT':'ACC','AGA':'CGC','AGC':'TCC','AGG':'CGG','AGT':'TCC','ATA':'ATC','ATC':'ATA','ATG':'ATG','ATT':'ATC','CAA':'CAG','CAC':'CAT','CAG':'CAA','CAT':'CAC','CCA':'CCC','CCC':'CCA','CCG':'CCC','CCT':'CCC','CGA':'AGA','CGC':'AGA','CGG':'AGA','CGT':'CGG','CTA':'TTA','CTC':'CTG','CTG':'CTC','CTT':'TTG','GAA':'GAG','GAC':'GAT','GAG':'GAA','GAT':'GAC','GCA':'GCC','GCC':'GCT','GCG':'GCC','GCT':'GCA','GGA':'GGC','GGC':'GGA','GGG':'GGC','GGT':'GGC','GTA':'GTC','GTC':'GTG','GTG':'GTC','GTT':'GTG','TAA':'TAA','TAC':'TAT','TAG':'TAG','TAT':'TAC','TCA':'AGC','TCC':'AGC','TCG':'AGC','TCT':'AGC','TGA':'TGA','TGC':'TGT','TGG':'TGG','TGT':'TGC','TTA':'CTC','TTC':'TTT','TTG':'CTT','TTT':'TTC'}
 
-#Now, I'll tackle the input sequence in chunks of three and substitute each input codon for its synonymous, alternative codon.
     AltCodingSequence =""
     for i in range (0,len(UserSeq),3):
         codon = UserSeq[i:i + 3]
