@@ -23,7 +23,7 @@ def AATranslate(NucleotideSequence):
 def AltCodon(UserSeq):
 
     ##This is my dictionary for the best alternative codon (using human codon frequency).
-    ##Best alternative codon was determined in this manner, with the higher numbered items taking higher priority:
+    ##Best alternative codon was determined in this manner, with the higher numbered items taking higher priority [there's a bit of subjectivity, though]:
     ##(1) The alternative codon codes for the same amino acid as the original codon (no alternative codons given for Met, Trp, or stop codons [-Term])
     ##(2) The most nucleotides was changed to generate the alternative codon (eg, for Leu, CTT was changed to TTG, not CTC)
     ##(3) The alternative codon was chosen to have the highest frequency of the remaining codons
@@ -36,3 +36,18 @@ def AltCodon(UserSeq):
         codon = UserSeq[i:i + 3]
         AltCodingSequence += HumanAltCodonDict[codon]
     return AltCodingSequence
+
+#added 2 Jan 2021
+#This just counts how many different mutations were generated. It splits the input and output sequence into lists, then compares each item (nucleotide) in the list one-by-one and increases a counter if they are the same.
+def SameChecker(InputSeq, OutputSeq):
+    SameTally = 0
+    def split(word):
+        return [char for char in word]
+    InputSeq=split(InputSeq)
+    OutputSeq=split(OutputSeq)
+
+    for i in range(len(InputSeq)):
+        if InputSeq[i] == OutputSeq[i]:
+            SameTally = SameTally + 1
+    return SameTally
+
