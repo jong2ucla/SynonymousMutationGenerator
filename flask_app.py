@@ -1,10 +1,6 @@
-#OK. I don't really know what I'm doing here, but let's role with it.
-#My goal is to use HTML to provide a framework to allow a user to input a given DNA sequence, feed that into the Python script, and then spit out the resulting RNAi-resistant DNA sequence.
-#Most of the direction here I am taking from https://blog.pythonanywhere.com/169/, Turning a Python script into a website
-
 from flask import Flask, request
 
-from processing import AATranslate, AltCodon
+from processing import AATranslate, AltCodon, SameChecker
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
@@ -21,6 +17,9 @@ def mainpage():
             TransRNAiResSeq = AATranslate(RNAiResSeq)
             ProtLength = len(TranslatedProtein)
             InputDNALength = len(InputDNA)
+            NumberBasesSame = SameChecker(str(InputDNA), str(RNAiResSeq)) #these are updated on 2 Jan 2021
+            NumberBasesDifferent = int(InputDNALength - NumberBasesSame) #these are updated on 2 Jan 2021
+            DifferencePercentage = round((int(NumberBasesDifferent))/(int(InputDNALength))*100,2) #these are updated on 2 Jan 2021
         if TransRNAiResSeq == TranslatedProtein:
             return '''
                 <html>
@@ -33,11 +32,13 @@ def mainpage():
                         <p>This translation corresponds to <b>{result3}</b> residues. </p>
                         <p>Your synonymous, RNAi-resistant DNA is:</p>
                         <p>{result2}</p>
+                        <p>This tool changed <b>{result5}</b> nucleotide bases, which means <b>{result6}</b>% of your input DNA bases have been changed.</p>
+                        <p>Note that your original RNAi sequence may be longer than your input DNA sequence.</p>
                         <p>This tool already checked to make sure the amino acid translation of the output DNA matched the translation of your input DNA.</p>
                         <p><a href="/">Click here to run another sequence </a>
                     </body>
                 </html>
-            '''.format(result0=InputDNA, result1=TranslatedProtein, result2=RNAiResSeq, result3=ProtLength, result4=InputDNALength)
+            '''.format(result0=InputDNA, result1=TranslatedProtein, result2=RNAiResSeq, result3=ProtLength, result4=InputDNALength, result5=NumberBasesDifferent, result6=DifferencePercentage)
     return '''
         <html>
             <body>
@@ -56,6 +57,7 @@ def mainpage():
                     <p><input name="UserInputDNA" /></p>
                     <p><input type="submit" value="Get RNAi-resistant sequence" /></p>
                 </form>
+                <p>Last updated: 2 Jan 2021 to include the difference counter</p>
             </body>
         </html>
     '''
